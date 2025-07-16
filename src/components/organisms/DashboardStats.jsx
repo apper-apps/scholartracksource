@@ -8,7 +8,8 @@ const DashboardStats = ({
   students = [], 
   grades = [], 
   attendance = [],
-  assignments = [] 
+  assignments = [],
+  onStudentsClick
 }) => {
   const totalStudents = students.length;
   
@@ -55,13 +56,14 @@ const DashboardStats = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <StatCard
+<StatCard
             title="Total Students"
             value={totalStudents}
             icon="Users"
             color="primary"
             change="3 new this month"
             changeType="positive"
+            onClick={onStudentsClick}
           />
         </motion.div>
         

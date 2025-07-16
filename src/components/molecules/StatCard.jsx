@@ -8,7 +8,8 @@ const StatCard = ({
   icon, 
   change, 
   changeType = "positive",
-  color = "primary" 
+  color = "primary",
+  onClick
 }) => {
   const colorClasses = {
     primary: "from-primary-500 to-secondary-500",
@@ -24,12 +25,15 @@ const StatCard = ({
     neutral: "text-gray-500",
   };
 
-  return (
+return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className="p-6 hover:shadow-lg">
+      <Card 
+        className={`p-6 hover:shadow-lg transition-all duration-200 ${onClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+        onClick={onClick}
+      >
         <div className="flex items-center justify-between mb-4">
           <div className={`p-3 rounded-lg bg-gradient-to-r ${colorClasses[color]}`}>
             <ApperIcon name={icon} className="w-6 h-6 text-white" />

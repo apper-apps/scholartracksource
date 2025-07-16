@@ -19,11 +19,15 @@ const Dashboard = () => {
   const loading = studentsLoading || gradesLoading || attendanceLoading || assignmentsLoading;
   const error = studentsError || gradesError || attendanceError || assignmentsError;
 
-  const handleRetry = () => {
+const handleRetry = () => {
     loadStudents();
     loadGrades();
     loadAttendance();
     loadAssignments();
+  };
+
+  const handleStudentsClick = () => {
+    navigate('/students');
   };
 
   useEffect(() => {
@@ -53,11 +57,12 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <DashboardStats
+<DashboardStats
         students={students}
         grades={grades}
         attendance={attendance}
         assignments={assignments}
+        onStudentsClick={handleStudentsClick}
       />
     </motion.div>
   );
