@@ -4,6 +4,7 @@ import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 import FormField from "@/components/molecules/FormField";
+import Modal from "@/components/molecules/Modal";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
@@ -19,9 +20,17 @@ const GradeEntry = ({
   onSubmitGrade,
   onAddAssignment 
 }) => {
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
+const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [gradeData, setGradeData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedGrade, setSelectedGrade] = useState(null);
+  const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
+  const [gradeForm, setGradeForm] = useState({
+    score: "",
+    comments: ""
+  });
+  const [gradeErrors, setGradeErrors] = useState({});
+  const [isUpdatingGrade, setIsUpdatingGrade] = useState(false);
 
   useEffect(() => {
     if (selectedAssignment) {
@@ -68,6 +77,63 @@ const GradeEntry = ({
       toast.error("Failed to submit grades");
     } finally {
       setIsSubmitting(false);
+    }
+};
+
+  const handleGradeClick = (student, grade) => {
+    setSelectedGrade({ student, grade });
+    setGradeForm({
+      score: grade?.score?.toString() || "",
+      comments: grade?.comments || ""
+    });
+    setGradeErrors({});
+    setIsGradeModalOpen(true);
+  };
+
+  const handleGradeFormChange = (field, value) => {
+    setGradeForm(prev => ({ ...prev, [field]: value }));
+    if (gradeErrors[field]) {
+      setGradeErrors(prev => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const validateGradeForm = () => {
+    const errors = {};
+    const score = parseFloat(gradeForm.score);
+    
+    if (gradeForm.score && (isNaN(score) || score < 0 || score > selectedAssignment.totalPoints)) {
+      errors.score = `Score must be between 0 and ${selectedAssignment.totalPoints}`;
+    }
+    
+    setGradeErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleGradeUpdate = async (e) => {
+    e.preventDefault();
+    
+    if (!validateGradeForm()) {
+      return;
+    }
+
+    setIsUpdatingGrade(true);
+    try {
+      const updatedGradeData = {
+        studentId: selectedGrade.student.Id,
+        assignmentId: selectedAssignment.Id,
+        score: parseFloat(gradeForm.score) || 0,
+        comments: gradeForm.comments || "",
+        submittedDate: new Date().toISOString()
+      };
+
+      await onSubmitGrade(updatedGradeData);
+      
+      setIsGradeModalOpen(false);
+      toast.success("Grade updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update grade");
+    } finally {
+      setIsUpdatingGrade(false);
     }
   };
 
@@ -181,19 +247,16 @@ const GradeEntry = ({
                           </span>
                         </div>
                       </td>
-                      <td className="py-3 px-4">
-                        <input
-                          type="number"
-                          min="0"
-                          max={selectedAssignment.totalPoints}
-                          value={studentGrade.score}
-                          onChange={(e) => handleGradeChange(student.Id, "score", e.target.value)}
-                          className="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                          placeholder="0"
-                        />
-                        <span className="text-sm text-gray-600 ml-2">
-                          / {selectedAssignment.totalPoints}
-                        </span>
+<td className="py-3 px-4">
+                        <div 
+                          className="flex items-center cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                          onClick={() => handleGradeClick(student, grades.find(g => g.studentId === student.Id && g.assignmentId === selectedAssignment.Id))}
+                        >
+                          <span className="text-sm font-medium text-primary-600">
+                            {studentGrade.score || "0"} / {selectedAssignment.totalPoints}
+                          </span>
+                          <ApperIcon name="ExternalLink" className="w-3 h-3 ml-2 text-gray-400" />
+                        </div>
                       </td>
                       <td className="py-3 px-4">
                         <span className={`text-sm font-medium ${
@@ -205,14 +268,15 @@ const GradeEntry = ({
                           {percentage ? `${percentage}%` : "-"}
                         </span>
                       </td>
-                      <td className="py-3 px-4">
-                        <input
-                          type="text"
-                          value={studentGrade.comments}
-                          onChange={(e) => handleGradeChange(student.Id, "comments", e.target.value)}
-                          className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                          placeholder="Optional comments"
-                        />
+<td className="py-3 px-4">
+                        <div 
+                          className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
+                          onClick={() => handleGradeClick(student, grades.find(g => g.studentId === student.Id && g.assignmentId === selectedAssignment.Id))}
+                        >
+                          <span className="text-sm text-gray-600 truncate max-w-xs block">
+                            {studentGrade.comments || "Click to add comments"}
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -221,7 +285,110 @@ const GradeEntry = ({
             </table>
           </div>
         </Card>
-      )}
+)}
+
+      <Modal
+        isOpen={isGradeModalOpen}
+        onClose={() => setIsGradeModalOpen(false)}
+        title={selectedGrade ? `Grade Details - ${selectedGrade.student.firstName} ${selectedGrade.student.lastName}` : "Grade Details"}
+        size="md"
+      >
+        {selectedGrade && (
+          <div className="space-y-4">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-medium text-gray-900 mb-2">Assignment Information</h4>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-600">Assignment:</span>
+                  <p className="font-medium">{selectedAssignment.title}</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">Category:</span>
+                  <p className="font-medium">{selectedAssignment.category}</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">Total Points:</span>
+                  <p className="font-medium">{selectedAssignment.totalPoints}</p>
+                </div>
+                <div>
+                  <span className="text-gray-600">Due Date:</span>
+                  <p className="font-medium">{new Date(selectedAssignment.dueDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium text-gray-900 mb-2">Student Information</h4>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-semibold text-primary-700">
+                    {selectedGrade.student.firstName[0]}{selectedGrade.student.lastName[0]}
+                  </span>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">
+                    {selectedGrade.student.firstName} {selectedGrade.student.lastName}
+                  </p>
+                  <p className="text-sm text-gray-600">{selectedGrade.student.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={handleGradeUpdate} className="space-y-4">
+              <FormField
+                label="Score"
+                type="number"
+                value={gradeForm.score}
+                onChange={(e) => handleGradeFormChange("score", e.target.value)}
+                error={gradeErrors.score}
+                placeholder="Enter score"
+                min="0"
+                max={selectedAssignment.totalPoints}
+              >
+                <div className="mt-1 text-sm text-gray-600">
+                  Out of {selectedAssignment.totalPoints} points
+                  {gradeForm.score && (
+                    <span className="ml-2 font-medium">
+                      ({((parseFloat(gradeForm.score) / selectedAssignment.totalPoints) * 100).toFixed(1)}%)
+                    </span>
+                  )}
+                </div>
+              </FormField>
+
+              <FormField
+                label="Comments"
+                value={gradeForm.comments}
+                onChange={(e) => handleGradeFormChange("comments", e.target.value)}
+                placeholder="Optional feedback for the student"
+                as="textarea"
+                rows={3}
+              />
+
+              {selectedGrade.grade && (
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-1">Last Updated:</p>
+                  <p className="text-sm font-medium">
+                    {new Date(selectedGrade.grade.submittedDate).toLocaleDateString()} at {new Date(selectedGrade.grade.submittedDate).toLocaleTimeString()}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsGradeModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isUpdatingGrade}>
+                  {isUpdatingGrade ? "Updating..." : "Update Grade"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
