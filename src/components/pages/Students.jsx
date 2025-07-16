@@ -57,18 +57,14 @@ const Students = () => {
     }
   };
 
-  const handleFormSubmit = async (formData) => {
-    try {
-      if (selectedStudent) {
-        await updateStudent(selectedStudent.Id, formData);
-      } else {
-        await addStudent(formData);
-      }
-      setIsFormOpen(false);
-      setSelectedStudent(null);
-    } catch (error) {
-      throw error;
+const handleFormSubmit = async (formData) => {
+    if (selectedStudent) {
+      await updateStudent(selectedStudent.Id, formData);
+    } else {
+      await addStudent(formData);
     }
+    setIsFormOpen(false);
+    setSelectedStudent(null);
   };
 
   const handleFormCancel = () => {
