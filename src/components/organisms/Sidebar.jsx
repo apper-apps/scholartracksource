@@ -5,7 +5,7 @@ import ApperIcon from "@/components/ApperIcon";
 import { cn } from "@/utils/cn";
 
 const Sidebar = ({ isMobileOpen, onMobileClose }) => {
-  const menuItems = [
+const menuItems = [
     { path: "/", icon: "Home", label: "Dashboard" },
     { path: "/students", icon: "Users", label: "Students" },
     { path: "/grades", icon: "BookOpen", label: "Grades" },

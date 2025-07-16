@@ -3,6 +3,8 @@ import { attendanceService } from "@/services/api/attendanceService";
 
 export const useAttendance = () => {
   const [attendance, setAttendance] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
+  const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,6 +14,23 @@ export const useAttendance = () => {
       setError(null);
       const data = await attendanceService.getAll();
       setAttendance(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+};
+
+  const loadAnalytics = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [analyticsData, alertsData] = await Promise.all([
+        attendanceService.getAttendanceAnalytics(),
+        attendanceService.getAttendanceAlerts()
+      ]);
+      setAnalytics(analyticsData);
+      setAlerts(alertsData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -51,11 +70,14 @@ export const useAttendance = () => {
     setAttendance(prev => prev.filter(record => record.Id !== id));
   };
 
-  return {
+return {
     attendance,
+    analytics,
+    alerts,
     loading,
     error,
     loadAttendance,
+    loadAnalytics,
     markAttendance,
     updateAttendance,
     deleteAttendance
