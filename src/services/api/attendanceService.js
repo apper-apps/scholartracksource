@@ -55,13 +55,12 @@ export const attendanceService = {
     throw new Error("Attendance record not found");
   },
 
-  delete: async (id) => {
+delete: async (id) => {
     await new Promise(resolve => setTimeout(resolve, 300));
     const index = attendance.findIndex(record => record.Id === id);
     if (index !== -1) {
       const deletedRecord = attendance.splice(index, 1)[0];
       return deletedRecord;
-return deletedRecord;
     }
     throw new Error("Attendance record not found");
   },
