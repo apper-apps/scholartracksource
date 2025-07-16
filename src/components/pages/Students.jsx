@@ -32,12 +32,6 @@ const Students = () => {
     setSelectedStudent(student);
     setIsFormOpen(true);
   };
-
-  const handleViewStudent = (student) => {
-    // Navigate to student detail view or show modal
-    console.log("View student:", student);
-  };
-
   const handleDeleteStudent = (studentId) => {
     const student = students.find(s => s.Id === studentId);
     setStudentToDelete(student);
@@ -109,16 +103,14 @@ const handleFormSubmit = async (formData) => {
         </div>
       </div>
 
-      <StudentTable
+<StudentTable
         students={filteredStudents}
         loading={loading}
         error={error}
         onRetry={loadStudents}
         onEdit={handleEditStudent}
         onDelete={handleDeleteStudent}
-        onView={handleViewStudent}
       />
-
       <Modal
         isOpen={isFormOpen}
         onClose={handleFormCancel}

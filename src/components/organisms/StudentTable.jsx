@@ -15,8 +15,7 @@ const StudentTable = ({
   error = null, 
   onRetry,
   onEdit,
-  onDelete,
-  onView 
+  onDelete
 }) => {
   const [sortBy, setSortBy] = useState("lastName");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -141,16 +140,8 @@ const StudentTable = ({
                 <td className="px-6 py-4">
                   <Badge variant="success">Active</Badge>
                 </td>
-                <td className="px-6 py-4">
+<td className="px-6 py-4">
                   <div className="flex items-center justify-end space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onView(student)}
-                      className="p-2"
-                    >
-                      <ApperIcon name="Eye" className="w-4 h-4" />
-                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
