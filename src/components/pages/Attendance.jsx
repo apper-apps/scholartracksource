@@ -5,7 +5,7 @@ import { useStudents } from "@/hooks/useStudents";
 import { useAttendance } from "@/hooks/useAttendance";
 import StatCard from "@/components/molecules/StatCard";
 import Card from "@/components/atoms/Card";
-import { Button } from "@/components/atoms/Button";
+import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 import Chart from "react-apexcharts";
 import { toast } from "react-toastify";
