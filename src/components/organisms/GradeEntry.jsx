@@ -36,8 +36,8 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
     if (selectedAssignment) {
       const assignmentGrades = {};
       students.forEach(student => {
-        const existingGrade = grades.find(g => 
-          g.studentId === student.Id && g.assignmentId === selectedAssignment.Id
+const existingGrade = grades.find(g => 
+          g.student_id?.Id === student.Id && g.assignment_id?.Id === selectedAssignment.Id
         );
         assignmentGrades[student.Id] = {
           score: existingGrade ? existingGrade.score : "",
@@ -63,12 +63,12 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
 
     setIsSubmitting(true);
     try {
-      const gradesToSubmit = Object.entries(gradeData).map(([studentId, data]) => ({
-        studentId: parseInt(studentId),
-        assignmentId: selectedAssignment.Id,
+const gradesToSubmit = Object.entries(gradeData).map(([studentId, data]) => ({
+        student_id: parseInt(studentId),
+        assignment_id: selectedAssignment.Id,
         score: parseFloat(data.score) || 0,
         comments: data.comments || "",
-        submittedDate: new Date().toISOString()
+        submitted_date: new Date().toISOString().split('T')[0]
       }));
 
       await Promise.all(gradesToSubmit.map(grade => onSubmitGrade(grade)));
@@ -101,8 +101,8 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
     const errors = {};
     const score = parseFloat(gradeForm.score);
     
-    if (gradeForm.score && (isNaN(score) || score < 0 || score > selectedAssignment.totalPoints)) {
-      errors.score = `Score must be between 0 and ${selectedAssignment.totalPoints}`;
+if (gradeForm.score && (isNaN(score) || score < 0 || score > selectedAssignment.total_points)) {
+      errors.score = `Score must be between 0 and ${selectedAssignment.total_points}`;
     }
     
     setGradeErrors(errors);
@@ -118,12 +118,12 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
 
     setIsUpdatingGrade(true);
     try {
-      const updatedGradeData = {
-        studentId: selectedGrade.student.Id,
-        assignmentId: selectedAssignment.Id,
+const updatedGradeData = {
+        student_id: selectedGrade.student.Id,
+        assignment_id: selectedAssignment.Id,
         score: parseFloat(gradeForm.score) || 0,
         comments: gradeForm.comments || "",
-        submittedDate: new Date().toISOString()
+        submitted_date: new Date().toISOString().split('T')[0]
       };
 
       await onSubmitGrade(updatedGradeData);
@@ -183,13 +183,13 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
                 }`}
                 onClick={() => setSelectedAssignment(assignment)}
               >
-                <div className="flex items-center justify-between mb-2">
+<div className="flex items-center justify-between mb-2">
                   <h4 className="font-medium text-gray-900">{assignment.title}</h4>
-                  <span className="text-sm text-gray-600">{assignment.totalPoints} pts</span>
+                  <span className="text-sm text-gray-600">{assignment.total_points} pts</span>
                 </div>
                 <p className="text-sm text-gray-600 mb-2">{assignment.category}</p>
-                <p className="text-xs text-gray-500">
-                  Due: {new Date(assignment.dueDate).toLocaleDateString()}
+<p className="text-xs text-gray-500">
+                  Due: {new Date(assignment.due_date).toLocaleDateString()}
                 </p>
               </Card>
             </motion.div>
@@ -204,8 +204,8 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
               <h3 className="text-lg font-semibold text-gray-900">
                 Grade Entry: {selectedAssignment.title}
               </h3>
-              <p className="text-sm text-gray-600">
-                Total Points: {selectedAssignment.totalPoints}
+<p className="text-sm text-gray-600">
+                Total Points: {selectedAssignment.total_points}
               </p>
             </div>
             <Button
@@ -229,8 +229,8 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
               <tbody className="divide-y divide-gray-200">
                 {students.map((student) => {
                   const studentGrade = gradeData[student.Id] || { score: "", comments: "" };
-                  const percentage = studentGrade.score ? 
-                    ((parseFloat(studentGrade.score) / selectedAssignment.totalPoints) * 100).toFixed(1) : 
+const percentage = studentGrade.score ? 
+                    ((parseFloat(studentGrade.score) / selectedAssignment.total_points) * 100).toFixed(1) : 
                     "";
 
                   return (
@@ -238,22 +238,22 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
                       <td className="py-3 px-4">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-semibold text-primary-700">
-                              {student.firstName[0]}{student.lastName[0]}
-                            </span>
+<span className="text-xs font-semibold text-primary-700">
+                            {student.first_name[0]}{student.last_name[0]}
+                          </span>
                           </div>
-                          <span className="font-medium text-gray-900">
-                            {student.firstName} {student.lastName}
+<span className="font-medium text-gray-900">
+                            {student.first_name} {student.last_name}
                           </span>
                         </div>
                       </td>
 <td className="py-3 px-4">
                         <div 
                           className="flex items-center cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
-                          onClick={() => handleGradeClick(student, grades.find(g => g.studentId === student.Id && g.assignmentId === selectedAssignment.Id))}
+onClick={() => handleGradeClick(student, grades.find(g => g.student_id?.Id === student.Id && g.assignment_id?.Id === selectedAssignment.Id))}
                         >
                           <span className="text-sm font-medium text-primary-600">
-                            {studentGrade.score || "0"} / {selectedAssignment.totalPoints}
+                            {studentGrade.score || "0"} / {selectedAssignment.total_points}
                           </span>
                           <ApperIcon name="ExternalLink" className="w-3 h-3 ml-2 text-gray-400" />
                         </div>
@@ -271,7 +271,7 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
 <td className="py-3 px-4">
                         <div 
                           className="cursor-pointer hover:bg-gray-100 rounded p-1 transition-colors"
-                          onClick={() => handleGradeClick(student, grades.find(g => g.studentId === student.Id && g.assignmentId === selectedAssignment.Id))}
+onClick={() => handleGradeClick(student, grades.find(g => g.student_id?.Id === student.Id && g.assignment_id?.Id === selectedAssignment.Id))}
                         >
                           <span className="text-sm text-gray-600 truncate max-w-xs block">
                             {studentGrade.comments || "Click to add comments"}
@@ -290,7 +290,7 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
       <Modal
         isOpen={isGradeModalOpen}
         onClose={() => setIsGradeModalOpen(false)}
-        title={selectedGrade ? `Grade Details - ${selectedGrade.student.firstName} ${selectedGrade.student.lastName}` : "Grade Details"}
+title={selectedGrade ? `Grade Details - ${selectedGrade.student.first_name} ${selectedGrade.student.last_name}` : "Grade Details"}
         size="md"
       >
         {selectedGrade && (
@@ -307,12 +307,12 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
                   <p className="font-medium">{selectedAssignment.category}</p>
                 </div>
                 <div>
-                  <span className="text-gray-600">Total Points:</span>
-                  <p className="font-medium">{selectedAssignment.totalPoints}</p>
+<span className="text-gray-600">Total Points:</span>
+                  <p className="font-medium">{selectedAssignment.total_points}</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Due Date:</span>
-                  <p className="font-medium">{new Date(selectedAssignment.dueDate).toLocaleDateString()}</p>
+<p className="font-medium">{new Date(selectedAssignment.due_date).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
@@ -321,13 +321,13 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
               <h4 className="font-medium text-gray-900 mb-2">Student Information</h4>
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-semibold text-primary-700">
-                    {selectedGrade.student.firstName[0]}{selectedGrade.student.lastName[0]}
+<span className="text-sm font-semibold text-primary-700">
+                    {selectedGrade.student.first_name[0]}{selectedGrade.student.last_name[0]}
                   </span>
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">
-                    {selectedGrade.student.firstName} {selectedGrade.student.lastName}
+<p className="font-medium text-gray-900">
+                    {selectedGrade.student.first_name} {selectedGrade.student.last_name}
                   </p>
                   <p className="text-sm text-gray-600">{selectedGrade.student.email}</p>
                 </div>
@@ -343,13 +343,13 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
                 error={gradeErrors.score}
                 placeholder="Enter score"
                 min="0"
-                max={selectedAssignment.totalPoints}
+max={selectedAssignment.total_points}
               >
                 <div className="mt-1 text-sm text-gray-600">
-                  Out of {selectedAssignment.totalPoints} points
+Out of {selectedAssignment.total_points} points
                   {gradeForm.score && (
                     <span className="ml-2 font-medium">
-                      ({((parseFloat(gradeForm.score) / selectedAssignment.totalPoints) * 100).toFixed(1)}%)
+({((parseFloat(gradeForm.score) / selectedAssignment.total_points) * 100).toFixed(1)}%)
                     </span>
                   )}
                 </div>
@@ -367,8 +367,8 @@ const [selectedAssignment, setSelectedAssignment] = useState(null);
               {selectedGrade.grade && (
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-600 mb-1">Last Updated:</p>
-                  <p className="text-sm font-medium">
-                    {new Date(selectedGrade.grade.submittedDate).toLocaleDateString()} at {new Date(selectedGrade.grade.submittedDate).toLocaleTimeString()}
+<p className="text-sm font-medium">
+                    {new Date(selectedGrade.grade.submitted_date).toLocaleDateString()} at {new Date(selectedGrade.grade.submitted_date).toLocaleTimeString()}
                   </p>
                 </div>
               )}

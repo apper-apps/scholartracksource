@@ -109,13 +109,13 @@ const StudentTable = ({
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-semibold text-primary-700">
-                        {student.firstName[0]}{student.lastName[0]}
+<span className="text-sm font-semibold text-primary-700">
+                        {student.first_name[0]}{student.last_name[0]}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">
-                        {student.firstName} {student.lastName}
+<p className="font-medium text-gray-900">
+                        {student.first_name} {student.last_name}
                       </p>
                       <p className="text-sm text-gray-600">
                         ID: {student.Id}
@@ -133,8 +133,8 @@ const StudentTable = ({
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <p className="text-sm text-gray-900">
-                    {format(new Date(student.enrollmentDate), "MMM d, yyyy")}
+<p className="text-sm text-gray-900">
+                    {format(new Date(student.enrollment_date), "MMM d, yyyy")}
                   </p>
                 </td>
                 <td className="px-6 py-4">

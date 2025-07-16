@@ -29,8 +29,8 @@ const AttendanceGrid = ({
   useEffect(() => {
     const dailyAttendance = {};
     students.forEach(student => {
-      const studentAttendance = attendance.find(a => 
-        a.studentId === student.Id && isSameDay(new Date(a.date), selectedDate)
+const studentAttendance = attendance.find(a => 
+        a.student_id?.Id === student.Id && isSameDay(new Date(a.date), selectedDate)
       );
       dailyAttendance[student.Id] = studentAttendance ? studentAttendance.status : "present";
     });
@@ -47,9 +47,9 @@ const AttendanceGrid = ({
   const handleSubmitAttendance = async () => {
     setIsSubmitting(true);
     try {
-      const attendanceToSubmit = Object.entries(attendanceData).map(([studentId, status]) => ({
-        studentId: parseInt(studentId),
-        date: selectedDate.toISOString(),
+const attendanceToSubmit = Object.entries(attendanceData).map(([studentId, status]) => ({
+        student_id: parseInt(studentId),
+        date: selectedDate.toISOString().split('T')[0],
         status,
         notes: ""
       }));
@@ -190,13 +190,13 @@ const AttendanceGrid = ({
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-semibold text-primary-700">
-                          {student.firstName[0]}{student.lastName[0]}
+<span className="text-sm font-semibold text-primary-700">
+                          {student.first_name[0]}{student.last_name[0]}
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">
-                          {student.firstName} {student.lastName}
+<p className="font-medium text-gray-900">
+                          {student.first_name} {student.last_name}
                         </p>
                         <p className="text-sm text-gray-600">{student.grade}</p>
                       </div>

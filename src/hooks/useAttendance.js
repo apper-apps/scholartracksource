@@ -45,8 +45,8 @@ export const useAttendance = () => {
   const markAttendance = async (attendanceData) => {
     const newRecord = await attendanceService.create(attendanceData);
     setAttendance(prev => {
-      const existingIndex = prev.findIndex(a => 
-        a.studentId === attendanceData.studentId && 
+const existingIndex = prev.findIndex(a => 
+        a.student_id?.Id === attendanceData.student_id && 
         new Date(a.date).toISOString().split("T")[0] === new Date(attendanceData.date).toISOString().split("T")[0]
       );
       if (existingIndex !== -1) {

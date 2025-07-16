@@ -84,9 +84,9 @@ const Grades = () => {
     }
 
     try {
-      await addAssignment({
+await addAssignment({
         ...assignmentForm,
-        totalPoints: parseInt(assignmentForm.totalPoints)
+        total_points: parseInt(assignmentForm.totalPoints)
       });
       
       setIsAssignmentModalOpen(false);
@@ -168,7 +168,7 @@ const Grades = () => {
               </select>
             </FormField>
 
-            <FormField
+<FormField
               label="Total Points"
               type="number"
               required

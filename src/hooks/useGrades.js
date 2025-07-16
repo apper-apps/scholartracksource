@@ -26,8 +26,8 @@ export const useGrades = () => {
   const addGrade = async (gradeData) => {
     const newGrade = await gradeService.create(gradeData);
     setGrades(prev => {
-      const existingIndex = prev.findIndex(g => 
-        g.studentId === gradeData.studentId && g.assignmentId === gradeData.assignmentId
+const existingIndex = prev.findIndex(g => 
+        g.student_id?.Id === gradeData.student_id && g.assignment_id?.Id === gradeData.assignment_id
       );
       if (existingIndex !== -1) {
         return prev.map((grade, index) => index === existingIndex ? newGrade : grade);

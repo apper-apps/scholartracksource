@@ -4,12 +4,12 @@ import FormField from "@/components/molecules/FormField";
 import { toast } from "react-toastify";
 
 const StudentForm = ({ student, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
-    dateOfBirth: "",
+    date_of_birth: "",
     grade: "",
     photo: ""
   });
@@ -20,11 +20,11 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
   useEffect(() => {
     if (student) {
       setFormData({
-        firstName: student.firstName || "",
-        lastName: student.lastName || "",
+        first_name: student.first_name || "",
+        last_name: student.last_name || "",
         email: student.email || "",
         phone: student.phone || "",
-        dateOfBirth: student.dateOfBirth || "",
+        date_of_birth: student.date_of_birth || "",
         grade: student.grade || "",
         photo: student.photo || ""
       });
@@ -34,12 +34,12 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+if (!formData.first_name.trim()) {
+      newErrors.first_name = "First name is required";
     }
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = "Last name is required";
     }
 
     if (!formData.email.trim()) {
@@ -52,8 +52,8 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
       newErrors.phone = "Phone number is required";
     }
 
-    if (!formData.dateOfBirth) {
-      newErrors.dateOfBirth = "Date of birth is required";
+    if (!formData.date_of_birth) {
+      newErrors.date_of_birth = "Date of birth is required";
     }
 
     if (!formData.grade.trim()) {
@@ -75,9 +75,9 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
     setIsSubmitting(true);
     
     try {
-      const studentData = {
+const studentData = {
         ...formData,
-        enrollmentDate: student ? student.enrollmentDate : new Date().toISOString()
+        enrollment_date: student ? student.enrollment_date : new Date().toISOString().split('T')[0]
       };
 
       await onSubmit(studentData);
@@ -103,30 +103,27 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
     }
   };
 
-  const gradeOptions = [
-    "Pre-K", "Kindergarten", "1st Grade", "2nd Grade", "3rd Grade", 
-    "4th Grade", "5th Grade", "6th Grade", "7th Grade", "8th Grade", 
-    "9th Grade", "10th Grade", "11th Grade", "12th Grade"
+const gradeOptions = [
+    "7th Grade", "8th Grade"
   ];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
+<FormField
           label="First Name"
           required
-          value={formData.firstName}
-          onChange={(e) => handleChange("firstName", e.target.value)}
-          error={errors.firstName}
+          value={formData.first_name}
+          onChange={(e) => handleChange("first_name", e.target.value)}
+          error={errors.first_name}
           placeholder="Enter first name"
         />
-        
         <FormField
-          label="Last Name"
+label="Last Name"
           required
-          value={formData.lastName}
-          onChange={(e) => handleChange("lastName", e.target.value)}
-          error={errors.lastName}
+          value={formData.last_name}
+          onChange={(e) => handleChange("last_name", e.target.value)}
+          error={errors.last_name}
           placeholder="Enter last name"
         />
       </div>
@@ -153,12 +150,12 @@ const StudentForm = ({ student, onSubmit, onCancel }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
-          label="Date of Birth"
+label="Date of Birth"
           type="date"
           required
-          value={formData.dateOfBirth}
-          onChange={(e) => handleChange("dateOfBirth", e.target.value)}
-          error={errors.dateOfBirth}
+          value={formData.date_of_birth}
+          onChange={(e) => handleChange("date_of_birth", e.target.value)}
+          error={errors.date_of_birth}
         />
 
         <FormField

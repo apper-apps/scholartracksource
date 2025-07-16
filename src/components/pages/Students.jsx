@@ -17,8 +17,8 @@ const Students = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState(null);
 
-  const filteredStudents = students.filter(student =>
-    `${student.firstName} ${student.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+const filteredStudents = students.filter(student =>
+    `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.grade.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -132,7 +132,7 @@ const handleFormSubmit = async (formData) => {
       >
         <div className="space-y-4">
           <p className="text-gray-600">
-            Are you sure you want to delete {studentToDelete?.firstName} {studentToDelete?.lastName}? 
+Are you sure you want to delete {studentToDelete?.first_name} {studentToDelete?.last_name}? 
             This action cannot be undone and will remove all associated grades and attendance records.
           </p>
           <div className="flex justify-end space-x-3">

@@ -56,9 +56,9 @@ useEffect(() => {
   };
 
   const handleContactParent = (studentId) => {
-    const student = students.find(s => s.Id === studentId);
+const student = students.find(s => s.Id === studentId);
     if (student) {
-      toast.success(`Parent contact initiated for ${student.firstName} ${student.lastName}`);
+      toast.success(`Parent contact initiated for ${student.first_name} ${student.last_name}`);
     }
   };
 
@@ -181,8 +181,8 @@ return (
                   return (
                     <div key={alert.id} className="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
                       <div className="flex-1">
-                        <p className="font-medium text-red-900">
-                          {student ? `${student.firstName} ${student.lastName}` : 'Unknown Student'}
+<p className="font-medium text-red-900">
+                          {student ? `${student.first_name} ${student.last_name}` : 'Unknown Student'}
                         </p>
                         <p className="text-sm text-red-700">{alert.message}</p>
                         <p className="text-xs text-red-600 mt-1">
