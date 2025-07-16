@@ -1,0 +1,66 @@
+[
+  {
+    "Id": 1,
+    "studentId": 1,
+    "assignmentId": 1,
+    "score": 85,
+    "submittedDate": "2024-01-15",
+    "comments": "Good work on problem solving"
+  },
+  {
+    "Id": 2,
+    "studentId": 2,
+    "assignmentId": 1,
+    "score": 92,
+    "submittedDate": "2024-01-15",
+    "comments": "Excellent understanding of concepts"
+  },
+  {
+    "Id": 3,
+    "studentId": 3,
+    "assignmentId": 1,
+    "score": 78,
+    "submittedDate": "2024-01-15",
+    "comments": "Need to review chapter 5"
+  },
+  {
+    "Id": 4,
+    "studentId": 1,
+    "assignmentId": 2,
+    "score": 88,
+    "submittedDate": "2024-01-20",
+    "comments": "Well-structured lab report"
+  },
+  {
+    "Id": 5,
+    "studentId": 2,
+    "assignmentId": 2,
+    "score": 95,
+    "submittedDate": "2024-01-20",
+    "comments": "Outstanding analysis and conclusions"
+  },
+  {
+    "Id": 6,
+    "studentId": 4,
+    "assignmentId": 5,
+    "score": 87,
+    "submittedDate": "2024-02-10",
+    "comments": "Strong grasp of algebra"
+  },
+  {
+    "Id": 7,
+    "studentId": 6,
+    "assignmentId": 5,
+    "score": 91,
+    "submittedDate": "2024-02-10",
+    "comments": "Excellent work on complex problems"
+  },
+  {
+    "Id": 8,
+    "studentId": 8,
+    "assignmentId": 5,
+    "score": 83,
+    "submittedDate": "2024-02-10",
+    "comments": "Good effort, review factoring"
+  }
+]

@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "firstName": "Emma",
+    "lastName": "Johnson",
+    "email": "emma.johnson@student.edu",
+    "phone": "(555) 123-4567",
+    "dateOfBirth": "2010-03-15",
+    "enrollmentDate": "2023-08-20",
+    "grade": "7th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 2,
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "email": "michael.chen@student.edu",
+    "phone": "(555) 234-5678",
+    "dateOfBirth": "2009-11-22",
+    "enrollmentDate": "2023-08-20",
+    "grade": "8th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 3,
+    "firstName": "Sarah",
+    "lastName": "Williams",
+    "email": "sarah.williams@student.edu",
+    "phone": "(555) 345-6789",
+    "dateOfBirth": "2010-07-08",
+    "enrollmentDate": "2023-08-20",
+    "grade": "7th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 4,
+    "firstName": "David",
+    "lastName": "Brown",
+    "email": "david.brown@student.edu",
+    "phone": "(555) 456-7890",
+    "dateOfBirth": "2009-12-03",
+    "enrollmentDate": "2023-08-20",
+    "grade": "8th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 5,
+    "firstName": "Olivia",
+    "lastName": "Davis",
+    "email": "olivia.davis@student.edu",
+    "phone": "(555) 567-8901",
+    "dateOfBirth": "2010-05-17",
+    "enrollmentDate": "2023-08-20",
+    "grade": "7th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 6,
+    "firstName": "James",
+    "lastName": "Miller",
+    "email": "james.miller@student.edu",
+    "phone": "(555) 678-9012",
+    "dateOfBirth": "2009-09-25",
+    "enrollmentDate": "2023-08-20",
+    "grade": "8th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 7,
+    "firstName": "Sophia",
+    "lastName": "Wilson",
+    "email": "sophia.wilson@student.edu",
+    "phone": "(555) 789-0123",
+    "dateOfBirth": "2010-01-12",
+    "enrollmentDate": "2023-08-20",
+    "grade": "7th Grade",
+    "photo": ""
+  },
+  {
+    "Id": 8,
+    "firstName": "Alexander",
+    "lastName": "Moore",
+    "email": "alexander.moore@student.edu",
+    "phone": "(555) 890-1234",
+    "dateOfBirth": "2009-08-30",
+    "enrollmentDate": "2023-08-20",
+    "grade": "8th Grade",
+    "photo": ""
+  }
+]
