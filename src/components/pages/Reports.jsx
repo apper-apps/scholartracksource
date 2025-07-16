@@ -11,6 +11,8 @@ import { useGrades } from "@/hooks/useGrades";
 import { useAttendance } from "@/hooks/useAttendance";
 import { useAssignments } from "@/hooks/useAssignments";
 import { format } from "date-fns";
+import Chart from "react-apexcharts";
+import { chartService } from "@/services/api/chartService";
 
 const Reports = () => {
   const { students, loading: studentsLoading, error: studentsError, loadStudents } = useStudents();
@@ -66,11 +68,12 @@ const Reports = () => {
     return "error";
   };
 
-  const reportTypes = [
+const reportTypes = [
     { id: "overview", label: "Class Overview", icon: "BarChart3" },
     { id: "grades", label: "Grade Report", icon: "BookOpen" },
     { id: "attendance", label: "Attendance Report", icon: "Calendar" },
-    { id: "performance", label: "Performance Analysis", icon: "TrendingUp" }
+    { id: "performance", label: "Performance Analysis", icon: "TrendingUp" },
+    { id: "trends", label: "Trend Charts", icon: "LineChart" }
   ];
 
   useEffect(() => {
@@ -351,7 +354,220 @@ const Reports = () => {
         </Card>
       </div>
     </div>
-  );
+);
+
+  const renderTrendCharts = () => {
+    const trendData = chartService.calculateTrendData(students, grades, assignments);
+    const overallTrend = chartService.calculateOverallTrend(grades, assignments);
+    
+    return (
+      <div className="space-y-6">
+        {/* Overall Performance Trend */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">Overall Class Performance</h3>
+            <Badge variant="info">Average Trend</Badge>
+          </div>
+          <div className="h-80">
+            <Chart
+              options={{
+                chart: {
+                  type: 'line',
+                  height: 320,
+                  toolbar: { show: false },
+                  zoom: { enabled: false }
+                },
+                colors: ['#3b82f6', '#16a34a', '#f59e0b'],
+                stroke: {
+                  curve: 'smooth',
+                  width: 3
+                },
+                xaxis: {
+                  categories: overallTrend.categories,
+                  labels: {
+                    style: { fontSize: '12px', colors: '#6b7280' }
+                  }
+                },
+                yaxis: {
+                  min: 0,
+                  max: 100,
+                  labels: {
+                    style: { fontSize: '12px', colors: '#6b7280' }
+                  }
+                },
+                tooltip: {
+                  y: {
+                    formatter: (val) => `${val}%`
+                  }
+                },
+                legend: {
+                  position: 'top',
+                  horizontalAlign: 'right'
+                },
+                grid: {
+                  borderColor: '#e5e7eb',
+                  strokeDashArray: 4
+                }
+              }}
+              series={[
+                {
+                  name: 'Assignments',
+                  data: overallTrend.assignments
+                },
+                {
+                  name: 'Tests',
+                  data: overallTrend.tests
+                },
+                {
+                  name: 'Overall Grade',
+                  data: overallTrend.overall
+                }
+              ]}
+              type="line"
+              height={320}
+            />
+          </div>
+        </Card>
+
+        {/* Individual Student Performance */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">Individual Student Trends</h3>
+            <Badge variant="secondary">{students.length} Students</Badge>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {students.slice(0, 4).map((student) => {
+              const studentTrend = chartService.calculateStudentTrend(student.Id, grades, assignments);
+              
+              return (
+                <Card key={student.Id} className="p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-semibold text-primary-700">
+                          {student.firstName[0]}{student.lastName[0]}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">
+                          {student.firstName} {student.lastName}
+                        </p>
+                        <p className="text-xs text-gray-600">{student.grade}</p>
+                      </div>
+                    </div>
+                    <Badge variant={studentTrend.trend === 'up' ? 'success' : studentTrend.trend === 'down' ? 'error' : 'info'}>
+                      {studentTrend.average.toFixed(1)}%
+                    </Badge>
+                  </div>
+                  <div className="h-48">
+                    <Chart
+                      options={{
+                        chart: {
+                          type: 'line',
+                          height: 192,
+                          toolbar: { show: false },
+                          zoom: { enabled: false }
+                        },
+                        colors: ['#3b82f6'],
+                        stroke: {
+                          curve: 'smooth',
+                          width: 2
+                        },
+                        xaxis: {
+                          categories: studentTrend.categories,
+                          labels: {
+                            style: { fontSize: '10px', colors: '#6b7280' }
+                          }
+                        },
+                        yaxis: {
+                          min: 0,
+                          max: 100,
+                          labels: {
+                            style: { fontSize: '10px', colors: '#6b7280' }
+                          }
+                        },
+                        tooltip: {
+                          y: {
+                            formatter: (val) => `${val}%`
+                          }
+                        },
+                        legend: { show: false },
+                        grid: {
+                          borderColor: '#f3f4f6',
+                          strokeDashArray: 2
+                        }
+                      }}
+                      series={[
+                        {
+                          name: 'Performance',
+                          data: studentTrend.scores
+                        }
+                      ]}
+                      type="line"
+                      height={192}
+                    />
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </Card>
+
+        {/* Assignment Category Trends */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">Performance by Assignment Type</h3>
+            <Badge variant="accent">Category Analysis</Badge>
+          </div>
+          <div className="h-80">
+            <Chart
+              options={{
+                chart: {
+                  type: 'line',
+                  height: 320,
+                  toolbar: { show: false }
+                },
+                colors: ['#3b82f6', '#16a34a', '#f59e0b', '#9333ea', '#dc2626'],
+                stroke: {
+                  curve: 'smooth',
+                  width: 2
+                },
+                xaxis: {
+                  categories: chartService.getCategoryTrendLabels(assignments),
+                  labels: {
+                    style: { fontSize: '12px', colors: '#6b7280' }
+                  }
+                },
+                yaxis: {
+                  min: 0,
+                  max: 100,
+                  labels: {
+                    style: { fontSize: '12px', colors: '#6b7280' }
+                  }
+                },
+                tooltip: {
+                  y: {
+                    formatter: (val) => `${val}%`
+                  }
+                },
+                legend: {
+                  position: 'top',
+                  horizontalAlign: 'right'
+                },
+                grid: {
+                  borderColor: '#e5e7eb',
+                  strokeDashArray: 4
+                }
+              }}
+              series={chartService.calculateCategoryTrends(grades, assignments)}
+              type="line"
+              height={320}
+            />
+          </div>
+        </Card>
+      </div>
+    );
+  };
 
   const renderReport = () => {
     switch (selectedReport) {
@@ -363,6 +579,8 @@ const Reports = () => {
         return renderAttendanceReport();
       case "performance":
         return renderPerformanceReport();
+      case "trends":
+        return renderTrendCharts();
       default:
         return renderOverviewReport();
     }
