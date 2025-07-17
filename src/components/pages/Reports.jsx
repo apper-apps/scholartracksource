@@ -435,7 +435,7 @@ const reportTypes = [
             <h3 className="text-lg font-semibold text-gray-900">Individual Student Trends</h3>
             <Badge variant="secondary">{students.length} Students</Badge>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {students.slice(0, 4).map((student) => {
               const studentTrend = chartService.calculateStudentTrend(student.Id, grades, assignments);
               
@@ -445,12 +445,12 @@ const reportTypes = [
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
                         <span className="text-xs font-semibold text-primary-700">
-                          {student.firstName[0]}{student.lastName[0]}
+                          {student.first_name[0]}{student.last_name[0]}
                         </span>
                       </div>
                       <div>
                         <p className="font-medium text-gray-900 text-sm">
-                          {student.firstName} {student.lastName}
+                          {student.first_name} {student.last_name}
                         </p>
                         <p className="text-xs text-gray-600">{student.grade}</p>
                       </div>
