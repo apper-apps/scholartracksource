@@ -32,13 +32,13 @@ const Reports = () => {
     loadAssignments();
   };
 
-  const calculateStudentGradeAverage = (studentId) => {
-    const studentGrades = grades.filter(g => g.studentId === studentId);
+const calculateStudentGradeAverage = (studentId) => {
+    const studentGrades = grades.filter(g => g.student_id?.Id === studentId);
     if (studentGrades.length === 0) return 0;
     
     const totalPoints = studentGrades.reduce((sum, grade) => {
-      const assignment = assignments.find(a => a.Id === grade.assignmentId);
-      return sum + (assignment ? assignment.totalPoints : 0);
+      const assignment = assignments.find(a => a.Id === grade.assignment_id?.Id);
+      return sum + (assignment ? assignment.total_points : 0);
     }, 0);
     
     const earnedPoints = studentGrades.reduce((sum, grade) => sum + grade.score, 0);
@@ -46,8 +46,8 @@ const Reports = () => {
     return totalPoints > 0 ? ((earnedPoints / totalPoints) * 100).toFixed(1) : 0;
   };
 
-  const calculateStudentAttendanceRate = (studentId) => {
-    const studentAttendance = attendance.filter(a => a.studentId === studentId);
+const calculateStudentAttendanceRate = (studentId) => {
+    const studentAttendance = attendance.filter(a => a.student_id?.Id === studentId);
     if (studentAttendance.length === 0) return 0;
     
     const presentCount = studentAttendance.filter(a => a.status === "present").length;
@@ -161,9 +161,9 @@ const reportTypes = [
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {students.map((student) => {
+{students.map((student) => {
               const average = calculateStudentGradeAverage(student.Id);
-              const studentGrades = grades.filter(g => g.studentId === student.Id);
+              const studentGrades = grades.filter(g => g.student_id?.Id === student.Id);
               
               return (
                 <tr key={student.Id} className="hover:bg-gray-50">
@@ -171,12 +171,12 @@ const reportTypes = [
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
                         <span className="text-xs font-semibold text-primary-700">
-                          {student.firstName[0]}{student.lastName[0]}
+                          {student.first_name?.[0]}{student.last_name?.[0]}
                         </span>
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">
-                          {student.firstName} {student.lastName}
+                          {student.first_name} {student.last_name}
                         </p>
                         <p className="text-sm text-gray-600">{student.grade}</p>
                       </div>
@@ -231,8 +231,8 @@ const reportTypes = [
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {students.map((student) => {
-              const studentAttendance = attendance.filter(a => a.studentId === student.Id);
+{students.map((student) => {
+              const studentAttendance = attendance.filter(a => a.student_id?.Id === student.Id);
               const presentCount = studentAttendance.filter(a => a.status === "present").length;
               const absentCount = studentAttendance.filter(a => a.status === "absent").length;
               const lateCount = studentAttendance.filter(a => a.status === "late").length;
@@ -244,12 +244,12 @@ const reportTypes = [
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full flex items-center justify-center">
                         <span className="text-xs font-semibold text-primary-700">
-                          {student.firstName[0]}{student.lastName[0]}
+                          {student.first_name?.[0]}{student.last_name?.[0]}
                         </span>
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">
-                          {student.firstName} {student.lastName}
+                          {student.first_name} {student.last_name}
                         </p>
                         <p className="text-sm text-gray-600">{student.grade}</p>
                       </div>
@@ -295,7 +295,7 @@ const reportTypes = [
         <Card className="p-6">
           <h4 className="text-lg font-semibold text-gray-900 mb-4">Top Performers</h4>
           <div className="space-y-3">
-            {students
+{students
               .map(student => ({
                 ...student,
                 average: calculateStudentGradeAverage(student.Id)
@@ -307,7 +307,7 @@ const reportTypes = [
                   <div className="flex items-center space-x-2">
                     <span className="text-sm font-medium text-gray-600">#{index + 1}</span>
                     <span className="text-sm text-gray-900">
-                      {student.firstName} {student.lastName}
+                      {student.first_name} {student.last_name}
                     </span>
                   </div>
                   <Badge variant="success">{student.average}%</Badge>
@@ -325,7 +325,7 @@ const reportTypes = [
               .map((student) => (
                 <div key={student.Id} className="flex items-center justify-between">
                   <span className="text-sm text-gray-900">
-                    {student.firstName} {student.lastName}
+                    {student.first_name} {student.last_name}
                   </span>
                   <Badge variant="success">{calculateStudentAttendanceRate(student.Id)}%</Badge>
                 </div>
@@ -345,7 +345,7 @@ const reportTypes = [
               .map((student) => (
                 <div key={student.Id} className="flex items-center justify-between">
                   <span className="text-sm text-gray-900">
-                    {student.firstName} {student.lastName}
+                    {student.first_name} {student.last_name}
                   </span>
                   <Badge variant="warning">Review</Badge>
                 </div>
