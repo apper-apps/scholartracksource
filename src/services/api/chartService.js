@@ -116,9 +116,9 @@ export const chartService = {
   },
 
   // Calculate trend data for all students
-  calculateTrendData: (students, grades, assignments) => {
+calculateTrendData: (students, grades, assignments) => {
     return students.map(student => {
-      const studentTrend = this.calculateStudentTrend(student.Id, grades, assignments);
+      const studentTrend = chartService.calculateStudentTrend(student.Id, grades, assignments);
       return {
         studentId: student.Id,
         name: `${student.firstName} ${student.lastName}`,
